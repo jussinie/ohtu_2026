@@ -44,21 +44,19 @@ def build_table(season, nationality, players):
 def main():
     console = Console()
     season = Prompt.ask("Season", choices=SEASONS, default="2024-25")
-
     url = f"https://studies.cs.helsinki.fi/nhlstats/{season}/players"
-    reader = PlayerReader(url)
-    stats = PlayerStats(reader)
+    stats = PlayerStats(PlayerReader(url))
 
     while True:
-        nationality = Prompt.ask("Nationality", choices=NATIONALITIES, default="")
+        nationality = Prompt.ask(
+            "Nationality", choices=NATIONALITIES, default=""
+        )
         if not nationality:
             break
 
         players = stats.top_scorers_by_nationality(nationality)
-        table = build_table(season, nationality, players)
-        console.print(table)
+        console.print(build_table(season, nationality, players))
 
 
 if __name__ == "__main__":
     main()
-
