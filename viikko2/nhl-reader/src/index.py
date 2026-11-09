@@ -21,8 +21,8 @@ NATIONALITIES = [
 ]
 
 
-def build_table(season, nationality, players):
-    table = Table(title=f"Season {season} players from {nationality}")
+def build_table(season, category, players):
+    table = Table(title=f"Season {season} players from {category}")
     table.add_column("Released", style="cyan", no_wrap=True)
     table.add_column("teams", style="magenta")
     table.add_column("goals", justify="right", style="green")
@@ -41,6 +41,28 @@ def build_table(season, nationality, players):
     return table
 
 
+def search_players(stats):
+    search_by = Prompt.ask(
+        "Search by", choices=["nationality", "team", "quit"],
+        default="nationality",
+    )
+    if search_by == "quit":
+        return None
+
+    if search_by == "nationality":
+        category = Prompt.ask(
+            "Nationality", choices=NATIONALITIES, default=""
+        )
+        if not category:
+            return None
+        players = stats.top_scorers_by_nationality(category)
+    else:
+        category = Prompt.ask("Team").upper()
+        players = stats.top_scorers_by_team(category)
+
+    return category, players
+
+
 def main():
     console = Console()
     season = Prompt.ask("Season", choices=SEASONS, default="2024-25")
@@ -48,14 +70,11 @@ def main():
     stats = PlayerStats(PlayerReader(url))
 
     while True:
-        nationality = Prompt.ask(
-            "Nationality", choices=NATIONALITIES, default=""
-        )
-        if not nationality:
+        result = search_players(stats)
+        if result is None:
             break
-
-        players = stats.top_scorers_by_nationality(nationality)
-        console.print(build_table(season, nationality, players))
+        category, players = result
+        console.print(build_table(season, category, players))
 
 
 if __name__ == "__main__":
