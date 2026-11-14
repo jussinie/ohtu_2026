@@ -12,6 +12,48 @@ Register With Valid Username And Password
     Submit Credentials
     Register Should Succeed
 
+Register With Matching Password Confirmation
+    Set Username  arto
+    Set Password  salainen1
+    Set Password Confirmation  salainen1
+    Submit Credentials
+    Register Should Succeed
+
+Register With Nonmatching Password Confirmation
+    Set Username  arto
+    Set Password  salainen1
+    Set Password Confirmation  salainen2
+    Submit Credentials
+    Register Should Fail With Error Message
+
+Register With Password Containing Numbers
+    Set Username  arto
+    Set Password  kalle123
+    Set Password Confirmation  kalle123
+    Submit Credentials
+    Register Should Succeed
+
+Register With Password Containing Special Character
+    Set Username  arto
+    Set Password  kalle#abc
+    Set Password Confirmation  kalle#abc
+    Submit Credentials
+    Register Should Succeed
+
+Register With Password Made Of Lowercase Letters
+    Set Username  arto
+    Set Password  kallekalle
+    Set Password Confirmation  kallekalle
+    Submit Credentials
+    Register Should Fail With Error Message
+
+Register With Password Made Of Mixed Case Letters
+    Set Username  arto
+    Set Password  KalleKalle
+    Set Password Confirmation  KalleKalle
+    Submit Credentials
+    Register Should Fail With Error Message
+
 Register With Too Short Username And Valid Password
     Set Username  ar
     Set Password  salainen1
@@ -49,8 +91,12 @@ Register Should Fail With Message
     Register Page Should Be Open
     Get Text  body  *=  ${message}
 
+Register Should Fail With Error Message
+    Register Page Should Be Open
+    ${message}=  Get Text  li
+    Should Not Be Empty  ${message}
+
 Reset Application Create User And Go To Register Page
     Reset Application
     Create User  kalle  kalle123
     Go To Register Page
-
