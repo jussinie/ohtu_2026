@@ -2,3 +2,6 @@
 Ohjelmistotuotannon harjoitukset
 
 https://github.com/jussinie/ohtuvarasto
+
+Viikon 3 webcounter-repo:
+https://github.com/jussinie/webcounter
